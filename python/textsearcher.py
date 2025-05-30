@@ -1,21 +1,22 @@
 import re
 
+
 class TextSearcher(object):
-    
+
     def __init__(self):
         self.word_map = {}
         self.words = []
 
     @staticmethod
-    def __tokenize(word:str, default:str="")->str:
-        word_regex = r'([A-z0-9\'\-]+)'
+    def __tokenize(word: str, default: str = "") -> str:
+        word_regex = r"([A-z0-9\'\-]+)"
         matches = re.findall(word_regex, word.lower())
 
         # if the search contains multiple matches with punctuation
         # between, ignore that and make a single search term
         return "".join(matches) if matches else default
 
-    def load(self, file_path:str)->bool: 
+    def load(self, file_path: str) -> bool:
         self.word_map = {}
         self.words = []
 
@@ -36,8 +37,8 @@ class TextSearcher(object):
         except Exception as e:
             print(e)
             return False
-    
-    def search(self, word:str, context:int=0)->list:
+
+    def search(self, word: str, context: int = 0) -> list:
         result = []
         search_word = self.__tokenize(word, None)
         if search_word and search_word in self.word_map:
