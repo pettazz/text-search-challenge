@@ -4,7 +4,9 @@ import re
 class TextSearcher(object):
 
     def __init__(self):
+        # a map of search terms to word list indices 
         self.word_map = {}
+        # ordered list of all the source text words as-is
         self.words = []
 
     @staticmethod
@@ -12,8 +14,8 @@ class TextSearcher(object):
         word_regex = r"([A-z0-9\'\-]+)"
         matches = re.findall(word_regex, word.lower())
 
-        # if the search contains multiple matches with punctuation
-        # between, ignore that and make a single search term
+        # if the search contains multiple words with punctuation
+        # between, ignore that and make a single searchable term
         return "".join(matches) if matches else default
 
     def load(self, file_path: str) -> bool:
@@ -35,14 +37,15 @@ class TextSearcher(object):
 
             return True
         except Exception as e:
-            print(e)
+            print(e) # insert actual error handling here
             return False
 
     def search(self, word: str, context: int = 0) -> list:
         result = []
         search_word = self.__tokenize(word, None)
         if search_word and search_word in self.word_map:
-            for match_idx in self.word_map[search_word.lower()]:
+            for match_idx in self.word_map[search_word]:
+                # ensure we don't go beyond start/end
                 pre_idx = max(match_idx - context, 0)
                 post_idx = min(match_idx + context + 1, len(self.words))
 
