@@ -1,4 +1,4 @@
-import re
+import re, functools
 
 
 class TextSearcher(object):
@@ -10,6 +10,7 @@ class TextSearcher(object):
         self.words = []
 
     @staticmethod
+    @functools.cache
     def __tokenize(word: str, default: str = "") -> str:
         word_regex = r"([A-z0-9\'\-]+)"
         matches = re.findall(word_regex, word.lower())
